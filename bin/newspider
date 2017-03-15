@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-
-var config = [__dirname, require('path').sep, 'config.js'].join('');
-// var config = ['./config.js'].join('');
+const path = require('path')
+var config = [__dirname, path.sep, 'config.js'].join('');
 var cmd = '';
 var argv = [];
 
@@ -11,7 +10,7 @@ if(!process.argv[2]){
 }else{
     var res = process.argv[2].match(/^--config-file=(.*)/);
     if(res){
-        config = res[1];
+        config = [process.cwd(), path.sep, res[1]].join('');
         cmd = process.argv[3];
         argv = process.argv.slice(4);
     }else{
