@@ -1,0 +1,105 @@
+#!/usr/bin/env node
+
+var config = [__dirname, require('path').sep, 'config.js'].join('');
+// var config = ['./config.js'].join('');
+var cmd = '';
+var argv = [];
+
+if(!process.argv[2]){
+    console.log('usage:newspider [run|list|add|delete|truncate]');
+    process.exit();
+}else{
+    var res = process.argv[2].match(/^--config-file=(.*)/);
+    if(res){
+        config = res[1];
+        cmd = process.argv[3];
+        argv = process.argv.slice(4);
+    }else{
+        cmd = process.argv[2];
+        argv = process.argv.slice(3);
+    }
+}
+
+if(!require('fs').existsSync(config)){
+    console.log('error:unknown config file:' + config);
+    process.exit();
+}
+try{
+    var nc = require(config);
+}catch(e){
+    if(e.name == 'SyntaxError')
+        console.log('error:config file syntax error');
+    else
+        console.log('error:unknown config file:' + config);
+    process.exit();
+}
+
+(function(newspider, cmd, argv){
+    this.do_run = function(cb){
+        newspider.run();
+    }
+
+    this.do_list = function(){
+        newspider.queue.print();
+        process.exit();
+    }
+
+    this.do_add = function(url, time, priority){
+        var meta = arguments[3] || priority;
+        if(!url || !time){
+            console.log('add:unkonw url, time');
+            process.exit();
+        }
+        if(time === 'now')
+            time = require('moment')().unix();
+        else if(isNaN(parseInt(time)))
+            time = 0;
+        if(isNaN(parseInt(priority)))
+            priority = 0;
+
+        var obj = {
+            url:url,
+            time:parseInt(time),
+            priority:parseInt(priority)
+        }
+        try{
+            meta = JSON.parse(meta);
+            Object.keys(meta).forEach(function(k){
+                obj[k] = meta[k];
+            });
+        }catch(e){
+        }
+
+        if(newspider.add(obj)){
+            newspider.save();
+            console.log("add:", obj);
+        }else{
+            console.log("error add:", obj);
+        }
+        process.exit();
+    }
+
+    this.do_delete = function(mixed){
+        var res = newspider.delete(mixed);
+        if(false !== res){
+            console.log('delete:', res);
+            newspider.save();
+        }else{
+            console.log("delete:can't find " + mixed);
+        }
+        process.exit();
+    }
+
+    this.do_truncate = function(){
+        newspider.truncate();
+        newspider.save();
+        console.log("truncate:ok");
+        process.exit();
+    }
+
+    if(typeof this['do_' + cmd] !== 'function'){
+        console.log('usage:newspider [run|list|add|delete|truncate]');
+        process.exit();
+    }
+    this['do_' + cmd].apply(this, argv);
+})(require('../index.js')(nc), cmd, argv);

@@ -1,0 +1,24 @@
+{
+  "name": "newspider",
+  "version": "0.1.0",
+  "description": "news spider based file queue",
+  "main": "index.js",
+  "bin": "./bin/newspider",
+  "dependencies": {
+    "async": "^2.1.5",
+    "cheerio": "^0.22.0",
+    "moment": "^2.17.1",
+    "request": "^2.79.0",
+    "superagent": "^3.5.0",
+    "superagent-charset": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tuandai"
+  ],
+  "author": "xw",
+  "license": "MIT"
+}

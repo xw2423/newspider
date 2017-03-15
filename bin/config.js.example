@@ -1,0 +1,63 @@
+/*
+ * config = {
+ *      newsMeta:{
+ *          property: [true|false] //required or not
+ *          ...
+ *      },
+ *      newsList:[ //required
+ *         {
+ *          url:String, //required
+ *          link:CSS3, //required
+ *          time:CSS3, //required
+ *          [priority]:Number,
+ *          [domain]:String,
+ *          [charset]:String,
+ *          [newsMeta]:CSS3
+ *         },
+ *      ],
+ *      newsExclude:{
+ *          [url]:PATTERN
+ *          [newsMeta]:PATTERN
+ *      }
+ * }
+ */
+
+module.exports = {
+    newsMeta:{
+        subject:true,
+        message:false
+    },
+
+    newsList:[
+        {
+            url:'http://www.wdzj.com/news/gundong',
+            link:'.zllist h3 a',
+            time:'.s-bq span',
+            priority:10,
+            subject:'.s-title',
+            message:'.c-cen'
+        },
+        {
+            url:'http://finance.qq.com/gdyw.htm',
+            link:'#listZone em a',
+            time:'.a_time',
+            priority:5,
+            subject:'.qq_article h1',
+            message:'#Cnt-Main-Article-QQ',
+            domain:'http://finance.qq.com',
+            charset:'gb2312'
+        }
+    ],
+
+    newsExclude:{
+        url:[
+            /wdzj.*pingtai/
+        ],
+        subject:[
+            /直播/,
+            /沪指.*报/
+        ],
+        message:[
+        ]
+    }
+}
