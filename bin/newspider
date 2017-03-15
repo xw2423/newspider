@@ -5,7 +5,7 @@ var cmd = '';
 var argv = [];
 
 if(!process.argv[2]){
-    console.log('usage:newspider [run|list|add|delete|truncate]');
+    console.log('Usage: newspider [--config-file=/Path/to/file] run|list|add|delete|truncate');
     process.exit();
 }else{
     var res = process.argv[2].match(/^--config-file=(.*)/);
