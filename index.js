@@ -85,7 +85,12 @@ var NS = function(config){
         if(e.url){
             _ua(request.get(e.url)).end(function(err, res){
                 if(!err && res.ok){
-                    cb(null, _$(res.text)(e.link).map(function(i, el){
+                    var links;
+                    if(typeof e.link === 'function')
+                        links = e.link.call(_this, _$(res.text));
+                    else
+                        links = _$(res.text)(e.link);
+                    cb(null, links.map(function(i, el){
                         // console.log((e.domain || '') + $(el).attr('href'));
                         if($(el).attr('href')){
                             return {url:(e.domain || '') + $(el).attr('href'),config:e};
@@ -114,10 +119,19 @@ var NS = function(config){
                     time:moment(_$(res.text)(ar.config.time).html()).unix(),
                     priority:0
                 };
+                if(typeof ar.config.time === 'function')
+                    obj.time = ar.config.time.call(_this, _$(res.text))
+                else
+                    obj.time = _$(res.text)(ar.config.time).html();
+                obj.time = moment(obj.time).unix();
                 if(ar.config.priority) obj.priority = ar.config.priority;
                 Object.keys(_this.newsConfig.newsMeta).forEach(function(k){
-                    if(ar.config[k])
-                        obj[k] = _$(res.text)(ar.config[k]).html();
+                    if(ar.config[k]){
+                        if(typeof ar.config[k] === 'function')
+                            obj[k] = ar.config[k].call(_this, _$(res.text));
+                        else
+                            obj[k] = _$(res.text)(ar.config[k]).html();
+                    }
                 });
                 _this.add(obj);
             }else{

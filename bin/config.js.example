@@ -31,7 +31,9 @@ module.exports = {
     newsList:[
         {
             url:'http://www.wdzj.com/news/gundong',
-            link:'.zllist h3 a',
+            link:function($){
+                return $('.zllist h3 a').slice(0, 10);
+            },
             time:'.s-bq span',
             priority:10,
             subject:'.s-title',
@@ -45,6 +47,17 @@ module.exports = {
             subject:'.qq_article h1',
             message:'#Cnt-Main-Article-QQ',
             domain:'http://finance.qq.com',
+            charset:'gb2312'
+        },
+        {
+            url:'http://iof.hexun.com/index.html',
+            link:function($){
+                return $('.inf_tit a').slice(0, 10);
+            },
+            time:'.articleName span.pr20',
+            priority:8,
+            subject:'.articleName h1',
+            message:'.art_contextBox',
             charset:'gb2312'
         }
     ],
