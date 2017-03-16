@@ -50,15 +50,15 @@ module.exports = {
             charset:'gb2312'
         },
         {
-            url:'http://iof.hexun.com/index.html',
+            url:'http://m.hexun.com/iof.html',
             link:function($){
-                return $('.inf_tit a').slice(0, 10);
+                return $('.news_list_1 li a').slice(0, 10);
             },
-            time:'.articleName span.pr20',
+            time:'.dettime span:first-child',
             priority:8,
-            subject:'.articleName h1',
-            message:'.art_contextBox',
-            charset:'gb2312'
+            subject:'.deth2',
+            message:'.pbox',
+            domain:'http://m.hexun.com'
         }
     ],
 
