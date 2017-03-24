@@ -64,7 +64,7 @@ var NS = function(config){
             return this.queue.delete(parseInt(mixed))
         }else{
             var pos = false;
-            if(this.queueu.get().some(function(e, i){
+            if(this.queue.get().some(function(e, i){
                 if(e.url == mixed){
                     pos = i;
                     return true;

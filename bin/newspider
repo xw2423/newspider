@@ -86,7 +86,27 @@ try{
     }
 
     this.do_delete = function(mixed){
-        var res = newspider.delete(mixed);
+        var arr = mixed.toString().split(',');
+        var res = '';
+        if(arr.length > 1){
+            arr.sort(function(a, b){
+                return parseInt(b) - parseInt(a);
+            });
+            res = arr.reduce(function(pre, cur){
+                if(isNaN(parseInt(cur)))
+                    return pre;
+                var r = newspider.delete(cur);
+                if(r !== false){
+                    pre.push(r);
+                    return pre;
+                }
+                return pre;
+            }, []);
+            if(res.length == 0)
+                res = false;
+        }else{
+            res = newspider.delete(mixed);
+        }
         if(false !== res){
             console.log('delete:', res);
             newspider.save();
