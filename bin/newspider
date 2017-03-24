@@ -39,6 +39,13 @@ try{
     }
 
     this.do_list = function(){
+        console.log(newspider.newsConfig.newsList.map(function(e){
+            var t = newspider.queue.getLastUpdate(e.uid);
+            return [e.uid, t
+               ,require('moment')(t * 1000).format("Y-MM-DD HH:mm:ss")
+               ,e.url
+            ].join('|');
+        }))
         newspider.queue.print();
         process.exit();
     }

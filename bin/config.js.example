@@ -30,6 +30,7 @@ module.exports = {
 
     newsList:[
         {
+            uid:'wdzj',
             url:'http://www.wdzj.com/news/gundong',
             link:function($){
                 return $('.zllist h3 a').slice(0, 10);
@@ -40,6 +41,7 @@ module.exports = {
             message:'.c-cen'
         },
         {
+            uid:'qq',
             url:'http://finance.qq.com/gdyw.htm',
             link:'#listZone em a',
             time:'.a_time',
@@ -50,6 +52,7 @@ module.exports = {
             charset:'gb2312'
         },
         {
+            uid:'hexun',
             url:'http://m.hexun.com/iof.html',
             link:function($){
                 return $('.news_list_1 li a').slice(0, 10);

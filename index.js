@@ -41,8 +41,10 @@ var NS = function(config){
                 return a.time - b.time;
             return b.priority - a.priority;
         });
-        if(q.get(0) && q.getLastUpdate() < q.get(0).time)
-            q.setLastUpdate(q.get(0).time);
+        q.get().forEach(function(e){
+            if(q.getLastUpdate(e.uid) < e.time)
+                q.setLastUpdate(e.uid, e.time);
+        });
         q.save(file);
         return this;
     }
@@ -77,7 +79,7 @@ var NS = function(config){
     }
 
     this.truncate = function(){
-        this.queue.setLastUpdate(0).get().splice(0, this.queue.get().length);
+        this.queue.setLastUpdate(false).get().splice(0, this.queue.get().length);
         return this;
     }
 
@@ -115,6 +117,7 @@ var NS = function(config){
         r.end(function(err, res){
             if(!err && res.ok){
                 var obj = {
+                    uid:ar.config.uid,
                     url:ar.url,
                     time:moment(_$(res.text)(ar.config.time).html()).unix(),
                     priority:0
