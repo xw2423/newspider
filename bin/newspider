@@ -34,8 +34,16 @@ try{
 }
 
 (function(newspider, cmd, argv){
-    this.do_run = function(cb){
-        newspider.run();
+    this.do_run = function(save){
+        var _this = this;
+        save = save || function(){
+            _this.do_list();
+        };
+        if(save == '--save')
+            save = function(){
+                this.save();
+            }
+        newspider.run(save);
     }
 
     this.do_list = function(mixed){

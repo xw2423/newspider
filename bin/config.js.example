@@ -71,7 +71,6 @@ module.exports = {
     ],
     newsInclude:{
     },
-
     newsExclude:{
         url:[
             /wdzj.*pingtai/

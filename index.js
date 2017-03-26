@@ -184,12 +184,14 @@ var NS = function(config){
                 || !_this.newsConfig.newsExclude[k].some(function(e){
                     return obj[k] && obj[k].match(e);
                 });
-        }) && Object.keys(_this.newsConfig.newsMeta).concat('url').some(function(k){
+        }) && (Object.keys(_this.newsConfig.newsInclude).length == 0
+            || Object.keys(_this.newsConfig.newsMeta).concat('url').some(function(k){
             return _this.newsConfig.newsInclude[k]
-                && _this.newsConfig.newsInclude[k].some(function(e){
+                && (_this.newsConfig.newsInclude[k].length == 0
+                || _this.newsConfig.newsInclude[k].some(function(e){
                     return obj[k] && obj[k].match(e);
-                });
-        });
+                }));
+        }));
     }
 
     function _ua(req){
