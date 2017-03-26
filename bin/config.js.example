@@ -6,6 +6,7 @@
  *      },
  *      newsList:[ //required
  *         {
+ *          uid:String, //required
  *          url:String, //required
  *          link:CSS3, //required
  *          time:CSS3, //required
@@ -15,6 +16,10 @@
  *          [newsMeta]:CSS3
  *         },
  *      ],
+ *      newsInclude:{
+ *          [url]:PATTERN
+ *          [newsMeta]:PATTERN
+ *      },
  *      newsExclude:{
  *          [url]:PATTERN
  *          [newsMeta]:PATTERN
@@ -64,6 +69,8 @@ module.exports = {
             domain:'http://m.hexun.com'
         }
     ],
+    newsInclude:{
+    },
 
     newsExclude:{
         url:[

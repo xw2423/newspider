@@ -38,7 +38,8 @@ try{
         newspider.run();
     }
 
-    this.do_list = function(){
+    this.do_list = function(mixed){
+        mixed = mixed || '';
         console.log(newspider.newsConfig.newsList.map(function(e){
             var t = newspider.queue.getLastUpdate(e.uid);
             return [e.uid, t
@@ -46,7 +47,15 @@ try{
                ,e.url
             ].join('|');
         }))
-        newspider.queue.print();
+        console.log(newspider.queue.get().map(function(e, i){
+            return [i ,e.time
+                ,require('moment')(e.time * 1000).format("Y-MM-DD HH:mm:ss")
+            ].concat(mixed.toString().split(',').filter(function(k){
+                return typeof newspider.newsConfig.newsMeta[k] !== 'undefined';
+            }).map(function(ee){
+                return e[ee];
+            })).concat([e.url]).join('|');
+        }));
         process.exit();
     }
 

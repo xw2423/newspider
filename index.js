@@ -20,14 +20,48 @@ var NS = function(config){
 
     this.newsConfig = config;
 
+    this.init = function(mixed, cb){
+        var _this = this;
+        if(typeof mixed === 'undefined' || typeof mixed === 'function'){
+            this.init(this.newsConfig.newsList.reduce(function(pre, cur){
+                var l = cur.init;
+                if(!Array.isArray(l)){
+                    if(typeof l === 'function'){
+                        l = l.call(_this, cur);
+                    }else{
+                        return pre;
+                    }
+                }
+                return pre.concat(l.map(function(e){
+                    return Object.assign({}, cur, {url:e});
+                }));
+            }, []), mixed);
+        }else if(Array.isArray(mixed)){
+            this.newsConfig.newsList = mixed.splice(0, 1)
+            console.log('parse:', this.newsConfig.newsList.map(function(e){
+                return e.url
+            }));
+            if(mixed.length > 0){
+                this.run(function(){
+                    var _this = this;
+                    console.log('wait 3 second');
+                    setTimeout(function(){
+                        _this.init(mixed, cb);
+                    }, 3000)
+                });
+            }else{
+                this.run(cb);
+            }
+        }
+    }
+
     this.run = function(cb){
         var _this = this;
-        cb = cb || function(){}
-        async.concat(_this.newsConfig.newsList, parse_list, function(err, res){
+        cb = cb || function(){};
+        async.concat(this.newsConfig.newsList, parse_list, function(err, res){
             async.map(res.filter(function(e){
                 return e.url;
             }), parse_news, function(err, res){
-                _this.save();
                 cb.call(_this, _this.queue);
             });
         });
@@ -119,7 +153,7 @@ var NS = function(config){
                 var obj = {
                     uid:ar.config.uid,
                     url:ar.url,
-                    time:moment(_$(res.text)(ar.config.time).html()).unix(),
+                    time:0,
                     priority:0
                 };
                 if(typeof ar.config.time === 'function')
@@ -148,6 +182,11 @@ var NS = function(config){
         return Object.keys(_this.newsConfig.newsMeta).concat('url').every(function(k){
             return !_this.newsConfig.newsExclude[k]
                 || !_this.newsConfig.newsExclude[k].some(function(e){
+                    return obj[k] && obj[k].match(e);
+                });
+        }) && Object.keys(_this.newsConfig.newsMeta).concat('url').some(function(k){
+            return _this.newsConfig.newsInclude[k]
+                && _this.newsConfig.newsInclude[k].some(function(e){
                     return obj[k] && obj[k].match(e);
                 });
         });
