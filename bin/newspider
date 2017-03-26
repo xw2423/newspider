@@ -5,7 +5,7 @@ var cmd = '';
 var argv = [];
 
 if(!process.argv[2]){
-    console.log('Usage: newspider [--config-file=/Path/to/file] run|list|add|delete|truncate');
+    console.log('Usage: newspider [--config-file=/Path/to/file] init|run|list|add|delete|truncate');
     process.exit();
 }else{
     var res = process.argv[2].match(/^--config-file=(.*)/);
@@ -34,6 +34,18 @@ try{
 }
 
 (function(newspider, cmd, argv){
+    this.do_init = function(save){
+        var _this = this;
+        save = save || function(){
+            _this.do_list();
+        };
+        if(save == '--save')
+            save = function(){
+                this.save();
+            }
+        newspider.init(save);
+    }
+
     this.do_run = function(save){
         var _this = this;
         save = save || function(){
