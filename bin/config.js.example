@@ -13,6 +13,7 @@
  *          [priority]:Number,
  *          [domain]:String,
  *          [charset]:String,
+ *          [init]:Function
  *          [newsMeta]:CSS3
  *         },
  *      ],
