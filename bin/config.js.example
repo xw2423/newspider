@@ -13,15 +13,16 @@
  *          [priority]:Number,
  *          [domain]:String,
  *          [charset]:String,
- *          [init]:Function
+ *          [init]:Function,
  *          [newsMeta]:CSS3
  *         },
  *      ],
- *      newsInclude:{
+ *      [sort]:Function,
+ *      [newsInclude]:{
  *          [url]:PATTERN
  *          [newsMeta]:PATTERN
  *      },
- *      newsExclude:{
+ *      [newsExclude]:{
  *          [url]:PATTERN
  *          [newsMeta]:PATTERN
  *      }
@@ -68,8 +69,22 @@ module.exports = {
             subject:'.deth2',
             message:'.pbox',
             domain:'http://m.hexun.com'
+        },
+        {
+            uid:'fenghuang',
+            url:'http://finance.ifeng.com/listpage/597/1/list.shtml',
+            link:'#list01 h3>a',
+            time:'.p_time>span',
+            priority:4,
+            subject:'h1#artical_topic',
+            message:'#main_content'
         }
     ],
+    sort:function(a, b){
+        if(a.priority == b.priority)
+            return b.time - a.time;
+        return b.priority - a.priority;
+    },
     newsInclude:{
     },
     newsExclude:{

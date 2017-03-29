@@ -70,7 +70,7 @@ var NS = function(config){
 
     this.save = function(file){
         var q = this.queue;
-        q.sort(function(a, b){
+        q.sort(this.newsConfig.sort || function(a, b){
             if(a.priority == b.priority)
                 return a.time - b.time;
             return b.priority - a.priority;
