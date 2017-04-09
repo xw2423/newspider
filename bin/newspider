@@ -118,6 +118,16 @@ try{
         var arr = mixed.toString().split(',');
         var res = '';
         if(arr.length > 1){
+            arr = arr.reduce(function(pre, cur){
+                if(cur.match(/^\d+-\d+$/)){
+                    var mm = cur.toString().split('-');
+                    for(var i = parseInt(mm[0]);i <= parseInt(mm[1]);i++)
+                        pre.push(i);
+                }else{
+                    pre.push(parseInt(cur));
+                }
+                return pre
+            }, []);
             arr.sort(function(a, b){
                 return parseInt(b) - parseInt(a);
             });
@@ -133,6 +143,11 @@ try{
             }, []);
             if(res.length == 0)
                 res = false;
+        }else if(mixed.toString().match(/^\d+-\d+$/)){
+            res = []
+            var mm = mixed.toString().split('-');
+            for(var i = parseInt(mm[1]);i >= parseInt(mm[0]);i--)
+                res.push(newspider.delete(i));
         }else{
             res = newspider.delete(mixed);
         }
